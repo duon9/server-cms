@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF.js Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <style>
+        #pdf-canvas {
+            border: 1px solid black;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>PDF.js Example</h1>
+    <canvas id="pdf-canvas"></canvas>
+
+    <script>
+        // Đường dẫn đến tệp PDF
+        const url = 'https://f.openpdfs.org/jN2RXkqZdvW.pdf';
+
+        // Lấy phần tử canvas để render PDF vào
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Tải tệp PDF
+        pdfjsLib.getDocument(url).promise.then(pdf => {
+            console.log('PDF loaded');
+
+            // Lấy trang đầu tiên
+            pdf.getPage(1).then(page => {
+                console.log('Page loaded');
+
+                // Thiết lập kích thước của canvas
+                const scale = 1.5; // Tỉ lệ phóng to của trang PDF
+                const viewport = page.getViewport({ scale: scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render trang PDF lên canvas
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                page.render(renderContext).promise.then(() => {
+                    console.log('Page rendered');
+                });
+            });
+        }).catch(error => {
+            console.error('Error loading PDF:', error);
+        });
+    </script>
+</body>
+</html>

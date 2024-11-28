@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocketIO Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body>
+    <h1>SocketIO Test Page</h1>
+    <button id="connectButton">Connect to WebSocket</button>
+    <div id="messages"></div>
+
+    <script>
+        const socket = io.connect('http://127.0.0.1:5000');
+
+        socket.on('connect', function() {
+            console.log('Connected to the WebSocket server');
+            document.getElementById('messages').innerHTML += '<p>Connected to WebSocket server.</p>';
+        });
+
+        socket.on('message', function(data) {
+            console.log('Message from server:', data);
+            document.getElementById('messages').innerHTML += '<p>Message from server: ' + data.msg + '</p>';
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from WebSocket server');
+            document.getElementById('messages').innerHTML += '<p>Disconnected from WebSocket server.</p>';
+        });
+
+        document.getElementById('connectButton').onclick = function() {
+            socket.connect();
+        };
+    </script>
+</body>
+</html>

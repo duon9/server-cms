@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin mượn sách</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Hàm để tính toán và cập nhật bộ đếm ngược
+        function countdownTimer(endTime) {
+            const endDate = new Date(endTime);
+            const interval = setInterval(function() {
+                const now = new Date();
+                const timeLeft = endDate - now;
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    document.getElementById("countdown").innerText = "Sách đã được trả!";
+                } else {
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    document.getElementById("countdown").innerText = hours + " giờ " + minutes + " phút " + seconds + " giây";
+                }
+            }, 1000);
+        }
+    </script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="max-w-4xl mx-auto mt-10 bg-white shadow-lg rounded-lg">
+        <!-- Header -->
+        <div class="bg-blue-500 text-white p-6 rounded-t-lg">
+            <h1 class="text-2xl font-bold">Thông tin mượn sách</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 flex flex-col lg:flex-row gap-6">
+            <!-- Cover Image -->
+            <div class="flex-shrink-0">
+                {% if data.cover %}
+                    <img 
+                        src="{{ data.cover }}" 
+                        alt="Bìa sách {{ data.title }}" 
+                        class="w-60 h-auto rounded-lg shadow-md">
+                {% else %}
+                    <div class="w-60 h-80 bg-gray-300 flex items-center justify-center rounded-lg">
+                        <p class="text-gray-500">Không có ảnh bìa</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Book Information -->
+            <div class="flex-grow">
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Tựa sách:</p>
+                    <p class="text-gray-700">{{ data.title }}</p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Tác giả:</p>
+                    <p class="text-gray-700">{{ data.author }}</p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Thể loại:</p>
+                    <p class="text-gray-700">{{ data.genre }}</p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Năm xuất bản:</p>
+                    <p class="text-gray-700">{{ data.year }}</p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Ngày mượn:</p>
+                    <p class="text-gray-700">{{ data.start_time }}</p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Ngày trả:</p>
+                    <p class="text-gray-700">
+                        {% if data.end_time == 'Chưa trả' %}
+                            <span class="text-red-500 font-semibold">{{ data.end_time }}</span>
+                            <!-- Hiển thị bộ đếm ngược nếu chưa trả -->
+                            <p id="countdown" class="text-green-500 font-semibold"></p>
+                            <script>
+                                // Khởi tạo bộ đếm ngược nếu chưa trả
+                                countdownTimer("{{ data.end_time }}");
+                            </script>
+                        {% else %}
+                            {{ data.end_time }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Trạng thái:</p>
+                    <p class="text-gray-700">{{ data.status }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-100 p-4 rounded-b-lg text-center">
+            <a href="/" class="text-blue-500 font-semibold hover:underline">Quay lại trang chủ</a>
+        </div>
+    </div>
+</body>
+</html>
