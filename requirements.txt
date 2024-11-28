@@ -1,0 +1,8 @@
+flask
+flask-migrate
+flask-sqlalchemy
+flask-cors
+flask-socketio
+whoosh
+sqlalchemy
+gunicorn
