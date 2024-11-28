@@ -93,5 +93,12 @@ def get_user_last(user_id):
     create_day = user.create_at
     
     return (current_day - create_day).days
-    
+
+def get_book(book_id):
+    book = Book.query.filter_by(id = book_id).first()
+    if (book):
+        return book
+    else:
+        raise
+        
     

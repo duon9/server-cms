@@ -76,7 +76,7 @@ async def borrow_book_detail(id):
 
 @app.route('/book/<int:book_id>')
 async def book_detail(book_id):
-    book = Book.query.get_or_404(book_id)
+    book = utils.get_book(book_id = book_id)
     comments = Comment.query.filter_by(book_id=book_id).all()
     return render_template('book_detail.html', book=book, comments=comments)
 
