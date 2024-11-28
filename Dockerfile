@@ -1,13 +1,17 @@
+# Sử dụng Python image
 FROM python:3.10-slim
 
+# Đặt thư mục làm việc
 WORKDIR /app
 
-# Cài đặt dependencies
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy mã nguồn vào container
+# Copy toàn bộ mã nguồn vào container
 COPY . .
 
-# Chạy ứng dụng với Gunicorn
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "app:app"]
+# Cài đặt các thư viện từ requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Mở cổng 8080
+EXPOSE 8080
+
+# Chạy ứng dụng Flask
+CMD ["python", "app.py"]
